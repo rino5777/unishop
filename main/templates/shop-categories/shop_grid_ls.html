@@ -480,35 +480,32 @@
             </div>
 
 
-            <!-- Pagination-->
-            {{list_product}}
-
-            {% if list_product.has_previous  %}
-            <a href ='?page =1'> First</a>
-            <a href ='?page ={{list_product.previous_page_number}}'>Previous</a>
-            {% endif %}
-
-            Page {{list_product.number}} of {{list_product.paginator.num_pages}}
-
-
-            {% if list_product.has_next %}
-
-            <a href ='?page ={{list_product.next_page_number}}'>Next</a>
-            <a href ='?page ={{list_product.paginator.num_pages}}'>Last</a>
-
-            {% endif %}
+            <!-- Pagination-->  
             <nav class="pagination">
-              <div class="column">
-                <ul class="pages">
-                  <li class="active"><a href="#">1</a></li>
-                  <li><a href="#">2</a></li>
-                  <li><a href="#">3</a></li>
-                  <li><a href="#">4</a></li>
-                  <li>...</li>
-                  <li><a href="#">12</a></li>
-                </ul>
-              </div>
-              <div class="column text-right hidden-xs-down"><a class="btn btn-outline-secondary btn-sm" href="#">Next&nbsp;<i class="icon-arrow-right"></i></a></div>
+                {% if list_product.has_previous  %}
+                    <div class="column text-left"><a class="btn btn-outline-secondary btn-sm" href="?page={{list_product.previous_page_number}}"><i class="icon-arrow-left"></i>&nbsp;Prev</a></div>
+                    {% endif %}
+                    <div class="column ">Page {{list_product.number}} of {{list_product.paginator.num_pages}}</div>
+<!------------------------------------------> 
+                    
+                    <div class="column">
+                        <ul class="pages">
+                            {% for i in numofpage  %}
+                            {% if list_product.number == forloop.counter %}
+                            <li class="active"><a href="?page={{forloop.counter}}">{{forloop.counter}}</a></li>
+                            {% else %}
+                          <li class=""><a href="?page={{forloop.counter}}">{{forloop.counter}}</a></li>
+                          {% endif %}
+                          {% endfor %}
+                        </ul>
+                    </div>
+<!---------------------------------------------->
+                    {% if list_product.has_next %}
+                    <div class="column text-right hidden-xs-down"><a class="btn btn-outline-secondary btn-sm" href="?page={{list_product.next_page_number}}">Next&nbsp;<i class="icon-arrow-right"></i></a></div>
+                    {% endif %}
+
+
+            
             </nav>
           </div>
           <!-- Sidebar          -->
@@ -517,19 +514,31 @@
             <aside class="sidebar sidebar-offcanvas">
               <!-- Widget Categories-->
               <section class="widget widget-categories">
+                  {% for i in main_sub %}
+                  {{i.category}}
+                  {% endfor %}
                 <h3 class="widget-title">Shop Categories</h3>
+
+
+
+
                 {% for category in main_cat %}
+                
                 <ul>
                   <li class="has-children expanded"><a href="#">{{category.name}}</a><span>(1138)</span>
-                    {% for s_category in main_sub %}
-                    
-                        {% if category.name in main_sub.category %}
+             
                     <ul>
-                      <li><a href="#">{{main_sub.name}}</a><span>(508)</span>                       
-                      </li>
+                        {% for i in main_sub %}
+                        {% if i.category == category.name %}
+                      <li><a href="#">{{i.name}}</a><span>(508)</span> 
+                        {% elif i.category != category.name %}
+                        <p>{{i.category.type}} / {{category.name}}</p>
                         {% endif %}
-                    {% endfor %}
-                      
+                        {% endfor %}                      
+                      </li>
+                     
+                    
+                  
 
                      
                       
@@ -574,11 +583,13 @@
                     </ul>
                   </li> {% endcomment %}
                 </ul>
+
                 {% endfor %}
               </section>
               <!-- Widget Price Range-->
               <section class="widget widget-categories">
                 <h3 class="widget-title">Price Range</h3>
+                <!--FORM FOR PRICE RANGE-->
                 <form class="price-range-slider" method="post" data-start-min="250" data-start-max="650" data-min="0" data-max="1000" data-step="1">
                   <div class="ui-range-slider"></div>
                   <footer class="ui-range-slider-footer">
@@ -587,6 +598,7 @@
                     </div>
                     <div class="column">
                       <div class="ui-range-values">
+                          
                         <div class="ui-range-value-min">$<span></span>
                           <input type="hidden">
                         </div>&nbsp;-&nbsp;

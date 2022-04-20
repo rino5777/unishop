@@ -82,7 +82,7 @@ def filters(request, category_slug = None):
     subcategory = None
     main_cat = Category.objects.all()
     main_sub = SubCategory.objects.all()
-    
+    main_sub_list = get_list_or_404(SubCategory)
 
 
     subcategories = SubCategory.objects.filter()
@@ -90,35 +90,28 @@ def filters(request, category_slug = None):
     all_str = get_list_or_404(Product  )
     l_p = []   #  список продуктов
 
-    #Фильтра категории с боку 
-
-    # for cat_bar in main_cat:
-    #     for s_category in main_sub:
-
-    #------------------------
 
     print(main_sub)
     if category_slug:
-        #ProductInfo = get_object_or_404(Product)
         category = get_object_or_404(Category, slug=category_slug)  # фильтрация товара  по субкатегориям  
-        #subcategory = get_object_or_404(SubCategory ) 
         subcategories = subcategories.filter(category = category)   # 
-        #productS = product.filter(subcategory = subcategory)
+       
 
         for i in subcategories:     # фильтруем товар 
             for q in all_str:
                 if i == q.subcategory:
                     l_p.append(q) # добавление продуктов 
-                    print(l_p)
-
-    paginator = Paginator(l_p, 3)
+        print(l_p)
+    #set up pagination
+    paginator = Paginator(l_p, 2)
     page = request.GET.get('page')
     list_product = paginator.get_page(page)
+    numofpage = 'a' * list_product.paginator.num_pages
 
     return render(request,  'shop-categories/shop_grid_ls.html', { 'productS':all_str,
                              'filetBySubcategory': subcategories, 'l_p':l_p, 'main_sub': main_sub,
-                             'main_cat':main_cat, 'list_product': list_product} )
-    #return render(request,  'shop-categories/shop-single.html', { 'productS':all_str, 'filetBySubcategory': subcategories, 'pr':pr} )
+                             'main_cat':main_cat, 'list_product': list_product, 'numofpage': numofpage} )
+    
 
 
 def brands(request, brand_slug = None):
