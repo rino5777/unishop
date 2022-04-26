@@ -16,5 +16,7 @@ urlpatterns = [
 
     # переход с категории и отображение сразу товара ( игнорируя субкатегории  )
     path('<slug:category_slug>', views.filters, name = 'FromCategoryToProduct' ),
+    #переходим по фильрам (субкатегории )
+    path('<slug:filter_slug>', views.filters, name = 'FromCategoryToSubcategory' ), 
     
 ]

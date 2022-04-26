@@ -450,14 +450,41 @@
               </div>
             </div>
             <!-- Products Grid-->
-           
- 
+            <!---  отображения товара из фильтра слева (субкатегории)-->
+
             <div class="isotope-grid cols-3 mb-2">
+                <div class="gutter-sizer"></div>
+                <div class="grid-sizer"></div>
+                <!-- Product-->
+                {% for i in product %}
+                {% comment %} {% for i in l_p %} {% endcomment %}
+   
+                <div class="grid-item">
+                  <div class="product-card">
+                    <a class="product-thumb" href="{{ i.get_absolute_url }}"><img src="{{ MEDIA_URL }}{% if i.image1 %}{{ i.image1.url }}{% else %}{% static "img/no_image.png" %}{% endif %}" alt="Product"></a>
+                    <h3 class="product-title"><a href="{{ i.get_absolute_url }}">{{i.name}}</a></h3>
+                    <h4 class="product-price">
+                      <del>{{i.discount}}</del>{{i.price}}
+                    </h4>
+                    <div class="product-buttons">
+                      <button class="btn btn-outline-secondary btn-sm btn-wishlist" data-toggle="tooltip" title="Whishlist"><i class="icon-heart"></i></button>
+                      <button class="btn btn-outline-primary btn-sm" data-toast data-toast-type="success" data-toast-position="topRight" data-toast-icon="icon-circle-check" data-toast-title="Product" data-toast-message="successfuly added to cart!">Add to Cart</button>
+                    </div>
+                  </div>
+                </div> 
+                {% endfor %}
+              {% comment %} </div> {% endcomment %} <!-- вернуть если не удасться сместить -->
+
+
+         <!--  обычное отображение товара   ------>
+        
+
+            {% comment %} <div class="isotope-grid cols-3 mb-2">
               <div class="gutter-sizer"></div>
-              <div class="grid-sizer"></div>
+              <div class="grid-sizer"></div> {% endcomment %} <!-- вернуть если не удасться сместить -->
               <!-- Product-->
               {% for i in list_product %}
-              {% comment %} {% for i in l_p %} {% endcomment %}
+             
  
               <div class="grid-item">
                 <div class="product-card">
@@ -473,10 +500,6 @@
                 </div>
               </div> 
               {% endfor %}
-              
-              {% comment %} {% for i in products %}
-              <a href="{{ i.get_absolute_url }}"> {{i.name }}</a><rb>
-              {% endfor %} {% endcomment %}
             </div>
 
 
@@ -514,77 +537,32 @@
             <aside class="sidebar sidebar-offcanvas">
               <!-- Widget Categories-->
               <section class="widget widget-categories">
-                  {% for i in main_sub %}
-                  {{i.category}}
-                  {% endfor %}
+                 
                 <h3 class="widget-title">Shop Categories</h3>
 
-
-
-
-                {% for category in main_cat %}
-                
-                <ul>
-                  <li class="has-children expanded"><a href="#">{{category.name}}</a><span>(1138)</span>
-             
-                    <ul>
-                        {% for i in main_sub %}
-                        {% if i.category == category.name %}
-                      <li><a href="#">{{i.name}}</a><span>(508)</span> 
-                        {% elif i.category != category.name %}
-                        <p>{{i.category.type}} / {{category.name}}</p>
-                        {% endif %}
-                        {% endfor %}                      
-                      </li>
-                     
+                     {% for category in main_cat  %}
+                     <ul>
+                        <li class="has-children expanded"><a href="#">{{category}}</a><span>(1138)</span>
+                    {% for key,value in filter_left.items %}
+                            <ul>
+                               {% if value == category  %}
+                                
+                                <li><a href="{{ key.get_absolute_url }}">{{key}}</a><span>()</span> 
+                                    {% endif %}
+                             </ul>
                     
-                  
-
+                     {% endfor %}
+                     
+                       </li>
+                    </ul>
+                    {% endfor %}
                      
                       
-                    </ul>
-                  </li>
-                  {% comment %} <li class="has-children"><a href="#">Clothing</a><span>(2356)</span>
-                    <ul>
-                      <li><a href="#">Women's</a><span>(1032)</span>
-                        <ul>
-                          <li><a href="#">Dresses</a></li>
-                          <li><a href="#">Shirts &amp; Tops</a></li>
-                          <li><a href="#">Swimwear</a></li>
-                          <li><a href="#">Shorts</a></li>
-                        </ul>
-                      </li>
-                      <li><a href="#">Men's</a><span>(937)</span>
-                        <ul>
-                          <li><a href="#">Shirts &amp; Tops</a></li>
-                          <li><a href="#">Shorts</a></li>
-                          <li><a href="#">Swimwear</a></li>
-                          <li><a href="#">Pants</a></li>
-                        </ul>
-                      </li>
-                      <li><a href="#">Kid's Clothing</a><span>(386)</span></li>
-                    </ul>
-                  </li>
-                  <li class="has-children"><a href="#">Bags</a><span>(420)</span>
-                    <ul>
-                      <li><a href="#">Handbags</a><span>(180)</span></li>
-                      <li><a href="#">Backpacks</a><span>(132)</span></li>
-                      <li><a href="#">Wallets &amp; Accessories</a><span>(47)</span></li>
-                      <li><a href="#">Luggage</a><span>(61)</span></li>
-                    </ul>
-                  </li>
-                  <li class="has-children"><a href="#">Accessories</a><span>(874)</span>
-                    <ul>
-                      <li><a href="#">Sunglasses</a><span>(211)</span></li>
-                      <li><a href="#">Hats</a><span>(195)</span></li>
-                      <li><a href="#">Watches</a><span>(159)</span></li>
-                      <li><a href="#">Jewelry</a><span>(203)</span></li>
-                      <li><a href="#">Belts</a><span>(106)</span></li>
-                    </ul>
-                  </li> {% endcomment %}
-                </ul>
+                  
+                
+               
 
-                {% endfor %}
+                {% comment %} {% endfor %} {% endcomment %}
               </section>
               <!-- Widget Price Range-->
               <section class="widget widget-categories">
